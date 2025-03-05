@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보고서</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <h1>보고서</h1>
+
+    <h2>매출 보고서</h2>
+    <canvas id="revenueChart"></canvas>
+
+    <h2>차량 이용률</h2>
+    <canvas id="usageChart"></canvas>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const revenueCtx = document.getElementById("revenueChart").getContext("2d");
+            const usageCtx = document.getElementById("usageChart").getContext("2d");
+
+            new Chart(revenueCtx, {
+                type: "line",
+                data: {
+                    labels: ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"],
+                    datasets: [{
+                        label: "매출 (만원)",
+                        data: [120, 150, 180, 100, 130, 170, 200],
+                        borderColor: "blue",
+                        fill: false
+                    }]
+                }
+            });
+
+            new Chart(usageCtx, {
+                type: "bar",
+                data: {
+                    labels: ["차량 A", "차량 B", "차량 C", "차량 D"],
+                    datasets: [{
+                        label: "이용률 (%)",
+                        data: [75, 60, 90, 50],
+                        backgroundColor: ["red", "green", "blue", "orange"]
+                    }]
+                }
+            });
+        });
+    </script>
+</body>
+</html>

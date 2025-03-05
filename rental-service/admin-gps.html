@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>경로 안내 (OpenStreetMap)</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+</head>
+<body>
+    <h1>경로 안내 (OpenStreetMap)</h1>
+    <div id="map" style="width:100%; height:500px;"></div>
+
+    <script>
+        var map = L.map('map').setView([37.5665, 126.9780], 13); // 서울 좌표
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // 차량 위치 (목적지)
+        var vehicleLocation = [37.5700, 126.9900]; // 예제 좌표
+
+        // 고객 위치 가져오기 (GPS 허용 필요)
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var userLat = position.coords.latitude;
+                    var userLng = position.coords.longitude;
+
+                    L.marker([userLat, userLng]).addTo(map)
+                        .bindPopup("현재 위치").openPopup();
+
+                    L.marker(vehicleLocation).addTo(map)
+                        .bindPopup("차량 위치").openPopup();
+
+                    // 경로 안내 추가
+                    L.Routing.control({
+                        waypoints: [
+                            L.latLng(userLat, userLng), // 고객 위치
+                            L.latLng(vehicleLocation[0], vehicleLocation[1]) // 차량 위치
+                        ],
+                        routeWhileDragging: true
+                    }).addTo(map);
+
+                }, function () {
+                    alert("위치 정보를 가져올 수 없습니다.");
+                });
+            } else {
+                alert("이 브라우저에서는 위치 서비스를 지원하지 않습니다.");
+            }
+        }
+
+        getUserLocation(); // 실행
+    </script>
+</body>
+</html>

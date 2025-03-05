@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>차량 이용 가능 여부 확인</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <h1>차량 이용 가능 여부 확인</h1>
+    <label for="rental-date">렌트 날짜 선택:</label>
+    <input type="date" id="rental-date">
+    <button onclick="checkAvailability()">확인</button>
+
+    <div id="result"></div>
+
+    <script src="js/calendar.js"></script>
+    <script>
+        function checkAvailability() {
+            const date = document.getElementById("rental-date").value;
+            document.getElementById("result").innerText = date ? `${date} 차량 예약 가능` : "날짜를 선택하세요.";
+        }
+    </script>
+</body>
+</html>
