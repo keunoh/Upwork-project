@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display 실습</title>
+  <style>
+    .box {
+      width: 100px;
+      height: 50px;
+      margin: 10px;
+      text-align: center;
+      line-height: 50px;
+      font-weight: bold;
+      border: 1px solid black;
+    }
+
+    .block {
+      display: block;
+      background-color: lightblue;
+    }
+
+    .inline {
+      display: inline;
+      background-color: lightcoral;
+    }
+
+    .inline-block {
+      display: inline-block;
+      background-color: lightgreen;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Block 요소</h2>
+  <p>✔ 블록 요소는 **세로로 나열됨**</p>
+  <p>✔ `width`와 `height`가 적용되어 **전체 너비를 차지함**</p>
+  <div class="box block">Block 1</div>
+  <div class="box block">Block 2</div>
+  <div class="box block">Block 3</div>
+  <div class="box block">Block 4</div>
+
+  <h2>Inline 요소</h2>
+  <p>✔ 인라인 요소는 **가로로 나열됨**</p>
+  <p>✔ `width`와 `height`가 적용되지 않음 (콘텐츠 크기만큼만 차지)</p>
+  <span class="box inline">Inline 1</span>
+  <span class="box inline">Inline 2</span>
+  <span class="box inline">Inline 3</span>
+  <span class="box inline">Inline 4</span>
+
+  <h2>Inline-Block 요소</h2>
+  <p>✔ 인라인-블록 요소는 **가로로 나열됨**</p>
+  <p>✔ 하지만 `width`와 `height`가 적용됨 (블록처럼 크기 조절 가능)</p>
+  <div class="box inline-block">Inline-Block 1</div>
+  <div class="box inline-block">Inline-Block 2</div>
+  <div class="box inline-block">Inline-Block 3</div>
+  <div class="box inline-block">Inline-Block 4</div>
+
+</body>
+</html>
