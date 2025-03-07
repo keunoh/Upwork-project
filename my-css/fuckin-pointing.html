@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PointerPointer Clone</title>
+  <style>
+    body {
+      background-color: black;
+    }
+
+    .pointer-box {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease-in-out, transform 0.2s ease-out;
+      opacity: 0;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px; /* 둥근 테두리 효과 */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pointer-box">
+    <img id="pointer-img" src="" alt="Pointer">
+  </div>
+
+  <script>
+    const pointerBox = document.querySelector(".pointer-box");
+    const pointerImg = document.getElementById("pointer-img");
+
+    // 인터넷에서 손가락 이미지 URL 가져오기
+    const images = [
+      "https://images.unsplash.com/photo-1531297484001-80022131f5a1", // Unsplash 손가락 이미지
+      "https://images.pexels.com/photos/1102341/pexels-photo-1102341.jpeg", // Pexels 손가락 이미지
+      "https://images.unsplash.com/photo-1602062917551-56369243b736", // Unsplash 손가락 이미지
+      "https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg" // Pexels 손가락 이미지
+    ];
+
+    let timeoutId;
+
+    document.addEventListener("mousemove", (e) => {
+      // 기존 타이머 제거
+      clearTimeout(timeoutId);
+
+      // 마우스가 멈추면 500ms 후 실행
+      timeoutId = setTimeout(() => {
+        pointerBox.style.left = `${e.pageX}px`;
+        pointerBox.style.top = `${e.pageY}px`;
+        pointerBox.style.opacity = "1"; // 이미지 나타남
+
+        // 랜덤 이미지 변경
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+        pointerImg.src = randomImage;
+      }, 500); // 마우스 멈춘 후 500ms 후 실행
+    });
+
+    // 마우스 클릭 시 이미지를 숨겼다가 다시 표시 (더 자연스럽게)
+    document.addEventListener("click", () => {
+      pointerBox.style.opacity = "0";
+    });
+  </script>
+
+</body>
+</html>

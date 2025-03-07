@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opacity 예제</title>
+  <style>
+    .box {
+      width: 200px;
+      height: 100px;
+      background-color: blue;
+      text-align: center;
+      line-height: 100px;
+      color: white;
+      font-size: 20px;
+      margin: 10px;
+    }
+
+    .full-opacity {
+      opacity: 1; /* 완전 불투명 */
+    }
+
+    .half-opacity {
+      opacity: 0.5; /* 반투명 */
+    }
+
+    .no-opacity {
+      opacity: 0; /* 완전히 투명 */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box full-opacity">불투명 (opacity: 1)</div>
+  <div class="box half-opacity">반투명 (opacity: 0.5)</div>
+  <div class="box no-opacity">투명 (opacity: 0)</div>
+
+</body>
+</html>
