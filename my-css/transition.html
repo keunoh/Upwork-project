@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transition 애니메이션</title>
+    <style>
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f4f4f4;
+      }
+
+      .btn {
+        padding: 15px 30px;
+        font-size: 18px;
+        color: white;
+        background-color: #3498db;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: backgroun-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .btn:hover {
+        background-color: #2ecc71;
+        transform: scale(1.1);
+      }
+    </style>
+  </head>
+  <body>
+    <button class="btn">애니메이션 버튼</button>
+  </body>
+</html>

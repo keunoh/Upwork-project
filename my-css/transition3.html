@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>색 변환 카드 애니메이션</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #eee;
+      }
+
+      .color-card {
+        width: 300px;
+        height: 200px;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        animation: changeColor 5s infinite alternate;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        color: white;
+        font-weight: bold;
+      }
+
+      @keyframes changeColor {
+        0% {
+          background-color: #e74c3c;
+        }
+        25% {
+          background-color: #f39c12;
+        }
+        50% {
+          background-color: #27ae60;
+        }
+        75% {
+          background-color: #2980b9;
+        }
+        100% {
+          background-color: #8e44ad;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="color-card">색이 바뀌는 카드</div>
+  </body>
+</html>
