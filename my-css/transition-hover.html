@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .box {
+        width: 100px;
+        height: 100px;
+        background-color: steelblue;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .box.animate-out {
+        animation: shrinkOut 0.5s ease;
+      }
+
+      @keyframes shrinkOut {
+        0% {
+          transform: scale(1);
+          background-color: steelblue;
+        }
+        50% {
+          transform: scale(0.8);
+          background-color: lightcoral;
+        }
+        100% {
+          transform: scale(1);
+          background-color: steelblue;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">Hover off me!</div>
+  </body>
+  <script>
+    const box = document.querySelector(".box");
+
+    box.addEventListener("mouseleave", () => {
+      box.classList.add("animate-out");
+
+      box.addEventListener(
+        "animationend",
+        () => {
+          box.classList.remove("animate-out");
+        },
+        { once: true }
+      );
+    });
+  </script>
+</html>
