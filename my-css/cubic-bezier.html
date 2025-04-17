@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background: linear-gradient(to right, #f0f8ff, #e6e6fa);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        margin: 0;
+      }
+
+      #container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .box {
+        display: inline-block;
+        animation-name: jump;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+      }
+
+      @keyframes jump {
+        0% {
+          transform: translateY(0) scale(1);
+        }
+        100% {
+          transform: translateY(-80px) scale(1.2);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+  <script>
+    const container = document.getElementById("container");
+
+    for (let i = 0; i < 10; i++) {
+      const box = document.createElement("div");
+      box.classList.add("box");
+
+      // 랜덤 크기
+      const size = Math.floor(Math.random() * 40) + 60; // 60px ~ 100px
+      box.style.width = `${size}px`;
+      box.style.height = `${size}px`;
+
+      // 랜덤 색상
+      const colors = [
+        "lightcoral",
+        "lightseagreen",
+        "lightpink",
+        "lightskyblue",
+        "plum",
+        "lavender",
+        "khaki",
+        "palegreen",
+        "lightyellow",
+        "thistle",
+      ];
+      box.style.backgroundColor =
+        colors[Math.floor(Math.random() * colors.length)];
+
+      // 랜덤 border-radius
+      box.style.borderRadius = `${Math.floor(Math.random() * 30) + 10}px`;
+
+      // 랜덤 애니메이션 시간
+      const duration = (Math.random() * 2 + 2).toFixed(2); // 2s ~ 4s
+      box.style.animationDuration = `${duration}s`;
+
+      // 랜덤 애니메이션 딜레이
+      const delay = (Math.random() * 2).toFixed(2); // 0s ~ 2s
+      box.style.animationDelay = `${delay}s`;
+
+      // 랜덤 cubic-bezier
+      const bezier = `cubic-bezier(${Math.random().toFixed(
+        2
+      )}, ${Math.random().toFixed(2)}, ${Math.random().toFixed(
+        2
+      )}, ${Math.random().toFixed(2)})`;
+      box.style.animationTimingFunction = bezier;
+
+      container.appendChild(box);
+    }
+  </script>
+</html>

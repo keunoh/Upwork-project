@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        background: #f0f8ff;
+        height: 200vh;
+      }
+
+      .section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 150px;
+        gap: 30px;
+      }
+
+      .box {
+        width: 120px;
+        height: 120px;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        color: white;
+        opacity: 0;
+        transform: translateY(50px) scale(0.8) rotate(-10deg);
+        transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      }
+
+      /* 각 박스 색깔 다르게 */
+      .box:nth-child(1) {
+        background: lightcoral;
+      }
+      .box:nth-child(2) {
+        background: lightseagreen;
+      }
+      .box:nth-child(3) {
+        background: lightskyblue;
+      }
+      .box:nth-child(4) {
+        background: plum;
+      }
+      .box:nth-child(5) {
+        background: palegreen;
+      }
+      .box:nth-child(6) {
+        background: lightsalmon;
+      }
+
+      /* 등장할 때 */
+      .box.show {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0deg);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      /* 순차 등장 delay */
+      .box.show:nth-child(1) {
+        transition-delay: 0s;
+      }
+      .box.show:nth-child(2) {
+        transition-delay: 0.1s;
+      }
+      .box.show:nth-child(3) {
+        transition-delay: 0.2s;
+      }
+      .box.show:nth-child(4) {
+        transition-delay: 0.3s;
+      }
+      .box.show:nth-child(5) {
+        transition-delay: 0.4s;
+      }
+      .box.show:nth-child(6) {
+        transition-delay: 0.5s;
+      }
+
+      /* hover 시 */
+      .box.show:hover {
+        transform: scale(1.1);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+      }
+
+      /* 클릭 시 (active) */
+      .box.show:active {
+        transform: scale(0.95);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="section">
+      <div class="box">1</div>
+      <div class="box">2</div>
+      <div class="box">3</div>
+      <div class="box">4</div>
+      <div class="box">5</div>
+      <div class="box">6</div>
+    </div>
+  </body>
+  <script>
+    const boxes = document.querySelectorAll(".box");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+      }
+    );
+
+    boxes.forEach((box) => {
+      observer.observe(box);
+    });
+  </script>
+</html>
