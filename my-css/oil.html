@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Oil Painting - Full Version 🎨</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        height: 100vh;
+        background: #5c4b99;
+        position: relative;
+        font-family: "Arial", sans-serif;
+      }
+
+      .controls {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        z-index: 5;
+        background: rgba(255, 255, 255, 0.7);
+        padding: 10px;
+        border-radius: 10px;
+        width: 140px;
+      }
+
+      .control-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .section-title {
+        font-size: 12px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+        text-align: center;
+      }
+
+      .controls button {
+        width: 36px;
+        height: 36px;
+        border: none;
+        background: white;
+        border-radius: 50%;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: background 0.3s;
+      }
+
+      .controls button:hover {
+        background: #eee;
+      }
+
+      .color-palette {
+        margin-top: 5px;
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .color-swatch {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid #ccc;
+        cursor: pointer;
+      }
+
+      .grain {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background-image: url("https://i.imgur.com/o7p7R9f.png");
+        background-size: 300px 300px;
+        opacity: 0.08;
+        z-index: 3;
+        animation: grainMove 8s infinite alternate;
+      }
+
+      @keyframes grainMove {
+        0% {
+          background-position: 0 0;
+        }
+        100% {
+          background-position: 100px 100px;
+        }
+      }
+
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        pointer-events: auto;
+        transition: opacity 2s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 컨트롤 버튼 영역 -->
+    <div class="controls">
+      <!-- 배경 색상 선택 버튼들 업데이트 -->
+      <div class="control-section">
+        <div class="section-title">changeBackground</div>
+        <button onclick="changeBackground('#2C1A47')">🟣</button>
+        <!-- 다크 퍼플 -->
+        <button onclick="changeBackground('#0B1D51')">🔵</button>
+        <!-- 네이비 블루 -->
+        <button onclick="changeBackground('#4B1C2F')">🟥</button>
+        <!-- 다크 와인 -->
+      </div>
+
+      <div class="control-section">
+        <div class="section-title">changeBrush</div>
+        <button onclick="changeBrush('soft')">🖌️</button>
+        <button onclick="changeBrush('rough')">✏️</button>
+      </div>
+
+      <div class="control-section">
+        <div class="section-title">saveCanvas</div>
+        <button onclick="saveCanvas()">💾</button>
+      </div>
+
+      <div class="control-section">
+        <div class="section-title">palette</div>
+        <div class="color-palette">
+          <div
+            class="color-swatch"
+            style="background: #ffb6c1"
+            onclick="selectColor('#FFB6C1')"
+          ></div>
+          <div
+            class="color-swatch"
+            style="background: #ffd700"
+            onclick="selectColor('#FFD700')"
+          ></div>
+          <div
+            class="color-swatch"
+            style="background: #87cefa"
+            onclick="selectColor('#87CEFA')"
+          ></div>
+          <div
+            class="color-swatch"
+            style="background: #4682b4"
+            onclick="selectColor('#4682B4')"
+          ></div>
+          <div
+            class="color-swatch"
+            style="background: #b0c4de"
+            onclick="selectColor('#B0C4DE')"
+          ></div>
+          <div
+            class="color-swatch"
+            style="background: #98fb98"
+            onclick="selectColor('#98FB98')"
+          ></div>
+          <div
+            class="color-swatch"
+            style="background: #6b8e23"
+            onclick="selectColor('#6B8E23')"
+          ></div>
+          <div
+            class="color-swatch"
+            style="background: #e6e6fa"
+            onclick="selectColor('#E6E6FA')"
+          ></div>
+          <div
+            class="color-swatch"
+            style="background: #800020"
+            onclick="selectColor('#800020')"
+          ></div>
+          <div
+            class="color-swatch"
+            style="background: #ffa500"
+            onclick="selectColor('#FFA500')"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 드로잉 캔버스 -->
+    <canvas id="paint"></canvas>
+
+    <!-- 유화 질감 -->
+    <div class="grain"></div>
+
+    <script>
+      // 기본 시작 배경색도 변경
+      document.body.style.background = "#2C1A47";
+
+      const canvas = document.getElementById("paint");
+      const ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      // 다양한 팔레트
+      let palette = [
+        "#FFB6C1",
+        "#FFD700",
+        "#87CEFA",
+        "#4682B4",
+        "#B0C4DE",
+        "#98FB98",
+        "#6B8E23",
+        "#E6E6FA",
+        "#800020",
+        "#FFA500",
+      ];
+      let currentColor = palette[Math.floor(Math.random() * palette.length)];
+      let painting = false;
+      let drawnArea = 0;
+      const MAX_AREA = 500000;
+
+      // 브러시 설정
+      const brushes = {
+        soft: "https://i.imgur.com/IZ6lptM.png",
+        rough: "https://i.imgur.com/LnQ2d8N.png",
+      };
+      let currentBrush = new Image();
+      currentBrush.src = brushes.soft;
+
+      canvas.addEventListener("mousedown", () => {
+        painting = true;
+      });
+
+      canvas.addEventListener("mouseup", () => {
+        painting = false;
+        ctx.beginPath();
+      });
+
+      canvas.addEventListener("mousemove", draw);
+
+      function draw(e) {
+        if (!painting) return;
+
+        const x = e.clientX;
+        const y = e.clientY;
+        const size = 40; // 고정 크기
+
+        ctx.globalAlpha = 0.1;
+        ctx.globalCompositeOperation = "source-over";
+        ctx.fillStyle = currentColor;
+        ctx.beginPath();
+        ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.globalAlpha = 0.2;
+        ctx.globalCompositeOperation = "multiply";
+        ctx.drawImage(currentBrush, x - size / 2, y - size / 2, size, size);
+
+        drawnArea += size * size * 0.5;
+
+        if (drawnArea > MAX_AREA) {
+          resetCanvas();
+        }
+      }
+
+      function resetCanvas() {
+        canvas.style.opacity = 0;
+        setTimeout(() => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawnArea = 0;
+          canvas.style.opacity = 1;
+        }, 2000);
+      }
+
+      function changeBackground(color) {
+        document.body.style.background = color;
+      }
+
+      function changeBrush(type) {
+        currentBrush.src = brushes[type];
+      }
+
+      function selectColor(color) {
+        currentColor = color;
+      }
+
+      function saveCanvas() {
+        const link = document.createElement("a");
+        link.download = "my_oil_painting.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      }
+    </script>
+  </body>
+</html>

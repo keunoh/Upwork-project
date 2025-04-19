@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌌 3D Cube + Pyramid Universe - Final Version</title>
+    <style>
+      body {
+        margin: 0;
+        background: radial-gradient(circle at center, #0b0c10 0%, #000000 100%);
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .scene-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        gap: 100px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .scene {
+        width: 200px;
+        height: 200px;
+        perspective: 1000px;
+      }
+
+      .cube,
+      .pyramid {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        animation: rotate 12s infinite linear, float 4s infinite ease-in-out;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+      }
+
+      .cube .face,
+      .pyramid .face {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        backface-visibility: hidden;
+      }
+
+      /* Cube faces with pretty colors */
+      .cube .front {
+        background-image: url("https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
+        transform: rotateY(0deg) translateZ(100px);
+      }
+      .cube .back {
+        background-image: url("https://images.unsplash.com/photo-1511497584788-876760111969?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
+        transform: rotateY(180deg) translateZ(100px);
+      }
+      .cube .right {
+        background-image: url("https://images.unsplash.com/photo-1523978591478-c753949ff840?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
+        transform: rotateY(90deg) translateZ(100px);
+      }
+      .cube .left {
+        background-image: url("https://images.unsplash.com/photo-1552204400-5a0c99ef9c46?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
+        transform: rotateY(-90deg) translateZ(100px);
+      }
+      .cube .top {
+        background-image: url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
+        transform: rotateX(90deg) translateZ(100px);
+      }
+      .cube .bottom {
+        background-image: url("https://images.unsplash.com/photo-1499346030926-9a72daac6c63?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
+        transform: rotateX(-90deg) translateZ(100px);
+      }
+
+      /* Pyramid faces with night sky textures */
+      .pyramid .face-front {
+        background-image: url("https://images.unsplash.com/photo-1604242692764-2b6a5c9025f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
+        transform: rotateY(0deg) rotateX(60deg) translateZ(100px);
+        transform-origin: bottom;
+      }
+      .pyramid .face-back {
+        background-image: url("https://images.unsplash.com/photo-1605267843827-9ed273d45c89?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
+        transform: rotateY(180deg) rotateX(60deg) translateZ(100px);
+        transform-origin: bottom;
+      }
+      .pyramid .face-left {
+        background-image: url("https://images.unsplash.com/photo-1599427303058-f04c5b5ccbd6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
+        transform: rotateY(-90deg) rotateX(60deg) translateZ(100px);
+        transform-origin: bottom;
+      }
+      .pyramid .face-right {
+        background-image: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
+        transform: rotateY(90deg) rotateX(60deg) translateZ(100px);
+        transform-origin: bottom;
+      }
+      .pyramid .face-bottom {
+        background-image: url("https://images.unsplash.com/photo-1503437313881-503a91226402?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
+        transform: rotateX(90deg) translateZ(100px);
+      }
+
+      /* 별 */
+      .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        z-index: 0;
+        animation: twinkle 2s infinite ease-in-out;
+        animation-delay: calc(var(--delay) * 1s);
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotateX(-20deg) rotateY(0deg);
+        }
+        100% {
+          transform: rotateX(-20deg) rotateY(360deg);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.8;
+        }
+        50% {
+          opacity: 0.2;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scene-container">
+      <div class="scene">
+        <div class="cube" id="cube">
+          <div class="face front"></div>
+          <div class="face back"></div>
+          <div class="face right"></div>
+          <div class="face left"></div>
+          <div class="face top"></div>
+          <div class="face bottom"></div>
+        </div>
+      </div>
+
+      <div class="scene">
+        <div class="pyramid" id="pyramid">
+          <div class="face face-front"></div>
+          <div class="face face-back"></div>
+          <div class="face face-left"></div>
+          <div class="face face-right"></div>
+          <div class="face face-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 별 생성
+      for (let i = 0; i < 300; i++) {
+        const star = document.createElement("div");
+        star.classList.add("star");
+        const size = Math.random() * 2 + 1;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.setProperty("--delay", Math.random() * 2);
+        document.body.appendChild(star);
+      }
+
+      // 마우스로 큐브, 피라미드 회전 조절
+      const cube = document.getElementById("cube");
+      const pyramid = document.getElementById("pyramid");
+      let isDragging = false;
+      let startX, startY;
+      let rotateX = -20,
+        rotateY = 20;
+
+      document.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        rotateY += dx * 0.3;
+        rotateX -= dy * 0.3;
+        cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        pyramid.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        startX = e.clientX;
+        startY = e.clientY;
+      });
+
+      document.addEventListener("mouseup", () => {
+        isDragging = false;
+      });
+    </script>
+  </body>
+</html>
