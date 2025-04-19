@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate Shooting Stars 🌌</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        height: 100vh;
+        background: radial-gradient(
+          ellipse at bottom,
+          #1b2735 0%,
+          #090a0f 100%
+        );
+        position: relative;
+        transition: background-color 0.3s;
+      }
+
+      .shooting-star {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0;
+        transform: rotate(-45deg);
+        z-index: 10;
+      }
+
+      .twinkle-star {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: twinkle 2s infinite ease-in-out alternate;
+        transition: transform 0.5s ease;
+      }
+
+      @keyframes shoot {
+        0% {
+          opacity: 1;
+          transform: translate(0, 0) rotate(-45deg);
+          box-shadow: 0 0 8px 4px white;
+        }
+        30% {
+          transform: translate(-200px, 200px) rotate(-45deg);
+        }
+        60% {
+          transform: translate(-500px, 500px) rotate(-40deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-800px, 800px) rotate(-50deg);
+          box-shadow: 0 0 2px 1px white;
+        }
+      }
+
+      @keyframes twinkle {
+        0% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      @keyframes explode {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+          box-shadow: 0 0 8px 4px white;
+        }
+        50% {
+          transform: scale(3);
+          opacity: 1;
+          box-shadow: 0 0 50px 20px white;
+        }
+        100% {
+          transform: scale(0);
+          opacity: 0;
+          box-shadow: 0 0 0px 0px white;
+        }
+      }
+
+      @keyframes screen-shake {
+        0% {
+          transform: translate(0, 0);
+        }
+        20% {
+          transform: translate(-5px, 5px);
+        }
+        40% {
+          transform: translate(5px, -5px);
+        }
+        60% {
+          transform: translate(-5px, -5px);
+        }
+        80% {
+          transform: translate(5px, 5px);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+
+      .screen-shake {
+        animation: screen-shake 0.4s;
+      }
+
+      .shake {
+        transform: scale(1.5);
+      }
+
+      #activate-sound {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: white;
+        color: black;
+        padding: 10px 20px;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        z-index: 1000;
+      }
+    </style>
+  </head>
+  <body>
+    <audio
+      id="explode-sound"
+      src="https://cdn.pixabay.com/audio/2022/03/15/audio_3fbcc2c89a.mp3"
+      preload="auto"
+    ></audio>
+    <button id="activate-sound">Activate Sound</button>
+
+    <script>
+      const pastelColors = [
+        "#ffffff",
+        "#ffe4e1",
+        "#e0ffff",
+        "#fafad2",
+        "#e6e6fa",
+        "#f0fff0",
+        "#ffd1dc",
+        "#c8e6c9",
+        "#d1c4e9",
+        "#b3e5fc",
+        "#ffecb3",
+        "#ffccbc",
+      ];
+
+      const explodeSound = document.getElementById("explode-sound");
+      const activateButton = document.getElementById("activate-sound");
+      let soundEnabled = false;
+
+      activateButton.addEventListener("click", () => {
+        explodeSound.play().then(() => {
+          soundEnabled = true;
+          activateButton.style.display = "none";
+        });
+      });
+
+      function createShootingStar(forceExplode = false) {
+        const star = document.createElement("div");
+        star.classList.add("shooting-star");
+
+        const colors = [
+          "#4facfe",
+          "#43e97b",
+          "#f9a8d4",
+          "#a78bfa",
+          "#facc15",
+          "#f472b6",
+          "#6EE7B7",
+          "#A5B4FC",
+          "#FCD34D",
+          "#FCA5A5",
+        ];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+        const randomWidth = Math.random() * 2 + 1;
+        const randomHeight = Math.random() * 50 + 50;
+        star.style.width = randomWidth + "px";
+        star.style.height = randomHeight + "px";
+
+        star.style.top = Math.random() * 30 + "%";
+        star.style.left = Math.random() * 30 + 70 + "%";
+
+        star.style.background = `linear-gradient(to top right, white, ${randomColor}00)`;
+
+        const duration = Math.random() * 1.5 + 1.5;
+        star.style.animation = `shoot ${duration}s ease-out forwards`;
+        star.style.animationDelay = Math.random() * 2 + "s";
+
+        document.body.appendChild(star);
+
+        createTrail(star);
+
+        if (Math.random() < 0.25 || forceExplode) {
+          const explodeTime = (Math.random() * 1.5 + 0.5) * 1000;
+          setTimeout(() => {
+            star.style.animation = `explode 1s ease-out forwards`;
+            if (soundEnabled) {
+              explodeSound.currentTime = 0;
+              explodeSound.play();
+            }
+            flashScreen();
+            shakeScreen();
+          }, explodeTime);
+        }
+
+        setTimeout(() => {
+          shakeNearbyStars(
+            parseFloat(star.style.top),
+            parseFloat(star.style.left)
+          );
+        }, parseFloat(star.style.animationDelay) * 1000);
+
+        star.addEventListener("animationend", () => {
+          star.remove();
+        });
+      }
+
+      function flashScreen() {
+        document.body.style.backgroundColor = "rgba(255,255,255,0.2)";
+        setTimeout(() => {
+          document.body.style.backgroundColor = "";
+        }, 200);
+      }
+
+      function shakeScreen() {
+        document.body.classList.add("screen-shake");
+        setTimeout(() => {
+          document.body.classList.remove("screen-shake");
+        }, 400);
+      }
+
+      function createTrail(star) {
+        const trail = document.createElement("div");
+        trail.classList.add("shooting-star");
+        trail.style.width = star.style.width;
+        trail.style.height = star.style.height;
+        trail.style.top = star.style.top;
+        trail.style.left = star.style.left;
+        trail.style.background = star.style.background;
+        trail.style.transform = "rotate(-45deg)";
+        trail.style.opacity = "0.5";
+        trail.style.transition = "opacity 1s ease-out";
+        document.body.appendChild(trail);
+
+        setTimeout(() => {
+          trail.style.opacity = "0";
+          setTimeout(() => trail.remove(), 1000);
+        }, 100);
+      }
+
+      function createTwinkleStars(count) {
+        for (let i = 0; i < count; i++) {
+          const star = document.createElement("div");
+          star.classList.add("twinkle-star");
+
+          const size = Math.random() * 2 + 1;
+          star.style.width = size + "px";
+          star.style.height = size + "px";
+          star.style.top = Math.random() * 100 + "%";
+          star.style.left = Math.random() * 100 + "%";
+          star.style.background =
+            pastelColors[Math.floor(Math.random() * pastelColors.length)];
+          star.style.animationDelay = Math.random() * 2 + "s";
+
+          document.body.appendChild(star);
+        }
+      }
+
+      function shakeNearbyStars(shootTop, shootLeft) {
+        const stars = document.querySelectorAll(".twinkle-star");
+        stars.forEach((star) => {
+          const starTop = parseFloat(star.style.top);
+          const starLeft = parseFloat(star.style.left);
+          if (
+            Math.abs(starTop - shootTop) < 20 &&
+            Math.abs(starLeft - shootLeft) < 20
+          ) {
+            star.classList.add("shake");
+            setTimeout(() => {
+              star.classList.remove("shake");
+            }, 500);
+          }
+        });
+      }
+
+      function createNebula() {
+        const nebula = document.createElement("div");
+        nebula.style.position = "fixed";
+        nebula.style.top = "0";
+        nebula.style.left = "0";
+        nebula.style.width = "100%";
+        nebula.style.height = "100%";
+        nebula.style.background =
+          "url(https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80)";
+        nebula.style.backgroundSize = "cover";
+        nebula.style.opacity = "0";
+        nebula.style.zIndex = "5";
+        nebula.style.pointerEvents = "none";
+        nebula.style.transition = "opacity 2s ease-in-out";
+
+        document.body.appendChild(nebula);
+
+        setTimeout(() => {
+          nebula.style.opacity = "0.3";
+          setTimeout(() => {
+            nebula.style.opacity = "0";
+            setTimeout(() => nebula.remove(), 2000);
+          }, 3000);
+        }, 100);
+      }
+
+      createTwinkleStars(150);
+
+      setInterval(() => {
+        createShootingStar();
+        if (Math.random() < 0.2) {
+          createShootingStar(true); // 쌍둥이 별똥별
+        }
+      }, 600);
+
+      setInterval(() => {
+        if (Math.random() < 0.3) {
+          createNebula();
+        }
+      }, 20000);
+    </script>
+  </body>
+</html>
