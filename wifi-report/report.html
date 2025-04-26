@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Network Traffic Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 2rem;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 1rem;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+        text-align: left;
+      }
+      th {
+        background: #f4f4f4;
+      }
+      .chart-container {
+        width: 45%;
+        display: inline-block;
+        vertical-align: top;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📊 Protocol & Top Talker Report</h1>
+
+    <div class="chart-container">
+      <h2>Protocol 분포</h2>
+      <canvas id="protoChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <h2>Top 10 Source IP</h2>
+      <canvas id="ipChart"></canvas>
+    </div>
+
+    <h2>Protocol 상세 목록</h2>
+    <table>
+      <tr>
+        <th>Protocol</th>
+        <th>Count</th>
+      </tr>
+      
+      <tr>
+        <td>ICMPv6</td>
+        <td>1</td>
+      </tr>
+      
+    </table>
+
+    <script>
+      // 차트 데이터 배열 생성 (대괄호 표기 사용)
+      const protoLabels = [&#39;ICMPv6&#39;];
+      const protoData   = [1];
+      const ipLabels    = [&#39;2001:e60:1045:88a3:4c1f:298d:c4c6:fd38&#39;];
+      const ipData      = [1];
+
+      new Chart(document.getElementById('protoChart').getContext('2d'), {
+        type: 'pie',
+        data: {
+          labels: protoLabels,
+          datasets: [{ data: protoData }]
+        }
+      });
+
+      new Chart(document.getElementById('ipChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ipLabels,
+          datasets: [{
+            label: 'Packet Count',   // ← 여기 추가
+          data: ipData }]
+        },
+        options: { indexAxis: 'y',
+          plugins: {
+            legend: { display: false },
+          }
+         }
+      });
+    </script>
+  </body>
+</html>
